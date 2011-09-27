@@ -42,29 +42,29 @@ figure(3);
 
 corner = imread('corner_window.jpg');
 
-subplot(321); imshow(corner); title('corner');
-subplot(322); imhist(corner); title('corner_hist');
+%subplot(321); imshow(corner); title('corner');
+%subplot(322); imhist(corner); title('corner_hist');
 
 figure(4);
 
 corridor = imread('corridor.jpg');
 
-subplot(321); imshow(corner); title('corner');
-subplot(322); imhist(corner); title('corner_hist');
+%subplot(321); imshow(corner); title('corner');
+%subplot(322); imhist(corner); title('corner_hist');
 
 figure(5);
 
 tree = imread('tree.jpg');
 
-subplot(321); imshow(corner); title('corner');
-subplot(322); imhist(corner); title('corner_hist');
+%subplot(321); imshow(corner); title('corner');
+%subplot(322); imhist(corner); title('corner_hist');
 
 figure(6);
 
 nyc = imread('New York City.jpg');
 
-subplot(321); imshow(corner); title('corner');
-subplot(322); imhist(corner); title('corner_hist');
+%subplot(321); imshow(corner); title('corner');
+%subplot(322); imhist(corner); title('corner_hist');
 
 
 
