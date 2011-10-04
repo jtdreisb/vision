@@ -36,35 +36,25 @@ subplot(324); imshow(myfilter(building, mean)); title('averaging');
 subplot(325); imshow(myfilter(building, gauss)); title('gaussian');
 
 
-% Part B
+% Part B - Edge Detection
 
-figure(3);
+figure(3); sobel_func('corner_window.jpg');
+figure(4); prewitt_func('corner_window.jpg');
 
-corner = imread('corner_window.jpg');
+figure(5); sobel_func('corridor.jpg');
+figure(6); prewitt_func('corridor.jpg');
 
-%subplot(321); imshow(corner); title('corner');
-%subplot(322); imhist(corner); title('corner_hist');
+figure(7); sobel_func('tree.jpg');
+figure(8); prewitt_func('tree.jpg');
 
-figure(4);
+figure(9); sobel_func('New York City.jpg');
+figure(10); prewitt_func('New York City.jpg');
 
-corridor = imread('corridor.jpg');
 
-%subplot(321); imshow(corner); title('corner');
-%subplot(322); imhist(corner); title('corner_hist');
 
-figure(5);
 
-tree = imread('tree.jpg');
 
-%subplot(321); imshow(corner); title('corner');
-%subplot(322); imhist(corner); title('corner_hist');
 
-figure(6);
-
-nyc = imread('New York City.jpg');
-
-%subplot(321); imshow(corner); title('corner');
-%subplot(322); imhist(corner); title('corner_hist');
 
 
 
