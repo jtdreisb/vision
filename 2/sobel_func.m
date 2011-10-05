@@ -7,9 +7,8 @@
 
 % Sobel Filter
 
-function [] = sobel_func(input)
+function [] = sobel_func(image)
 
-image = imread(input);
 image_gray = rgb2gray(image);
 
 %Horizontal and Vertical Sobel Edge Detectors

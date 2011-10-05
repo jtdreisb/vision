@@ -9,9 +9,8 @@
 
 %mask must be an odd size square
 
-function [] = prewitt_func(input)
+function [] = prewitt_func(image)
 
-image = imread(input);
 image_bw = rgb2gray(image);
 
 subplot(321); imshow(image_bw); title('Input Image');
