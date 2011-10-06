@@ -83,6 +83,21 @@ subplot(131); imshow(new_york_city);
 subplot(132); imshow(lapofgauss(new_york_city, 3, 1));
 subplot(133); imshow(lapofgauss(new_york_city, 3, 2));
 
+% Canny Edge Detector
+
+figure(15);
+
+cannyedge(corner);
+
+figure(16);
+cannyedge(corridor);
+
+figure(17);
+cannyedge(tree);
+
+figure(18);
+cannyedge(new_york_city);
+
 
 
 
