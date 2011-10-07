@@ -8,7 +8,7 @@
 % our filter function
 
 
-function [output] = myhough(input)
+function [] = myhough(input)
 
 bin_input = rgb2gray(input);
 subplot(121); imshow(input); title('Input Image');
@@ -35,9 +35,5 @@ for k = 1:length(lines)
 
    % Determine the endpoints of the longest line segment
    len = norm(lines(k).point1 - lines(k).point2);
-   if ( len > max_len)
-      max_len = len;
-      xy_long = xy;
-   end
 end
 
