@@ -98,7 +98,11 @@ cannyedge(tree);
 figure(18);
 cannyedge(new_york_city);
 
-
+% Find the lines with hough transform
+figure; myhough(corner);
+figure; myhough(corridor);
+figure; myhough(tree);
+figure; myhough(new_york_city);
 
 
 
