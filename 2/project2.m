@@ -19,7 +19,7 @@ subplot(321); imshow(boat); title('Boat');
 subplot(322); imhist(boat); title('histogram');
 
 % TODO: make the median filter work
-subplot(323); imshow(medfilt2(boat)); title('median filter');
+subplot(323); imshow(medianfilter(boat,3)); title('median filter');
 
 subplot(324); imshow(myfilter(boat, mean)); title('averaging');
 
@@ -31,7 +31,7 @@ figure(2);
 
 subplot(321); imshow(building); title('building');
 subplot(322); imhist(building); title('histogram');
-subplot(323); imshow(medfilt2(building)); title('median filter');
+subplot(323); imshow(medianfilter(building,3)); title('median filter');
 subplot(324); imshow(myfilter(building, mean)); title('averaging');
 subplot(325); imshow(myfilter(building, gauss)); title('gaussian');
 

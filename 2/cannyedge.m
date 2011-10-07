@@ -11,7 +11,8 @@
 
 function [output] = cannyedge(input)
 
-bin_input = im2bw(input);
+%bin_input = im2bw(input);
+bin_input = rgb2gray(input);
 
 subplot(331); imshow(input); title('Input Image');
 subplot(332); imshow(edge(bin_input, 'canny', 0.5, 0.5)); title('Thresh = 0.5, Sigma = 0.5');
