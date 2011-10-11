@@ -7,7 +7,7 @@ basedir = 'faces';
 
 for x=3: length(dirlist)
 	if (dirlist(x).isdir==1)%make sure it's a dir
-        imgdir = strcat(basedir,'/',dirlist(x).name)
+        imgdir = strcat(basedir,'/',dirlist(x).name);
         imgsearch = strcat(imgdir,'/*.jpg');
         
         imlist=dir(imgsearch);
