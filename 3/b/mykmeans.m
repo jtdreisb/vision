@@ -25,11 +25,11 @@ function [output] = mykmeans(input, k)
     done = 0;
     while done == 0
         % iterate through the image
-        meanvalues = inputmag(means);
+        meanvalues = getmeanvalues(inputmag,means);
         
         for i=1 : width
             for j=1 : height
-                output(j,i) = closestmean(meanvalues,input(j,i));
+                output(j,i) = closestmean(meanvalues,inputmag(j,i));
             end
         end
         done = 1;
