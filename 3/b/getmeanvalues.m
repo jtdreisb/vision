@@ -1,4 +1,6 @@
 % get mean values
+% project 3
+% Jason, Blake, Jen
 
 function [values] = getmeanvalues(input, means)
     values = [];
