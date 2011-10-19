@@ -6,5 +6,5 @@ function [closest] = closestmean(means, pixel)
 
     delta = means - pixel;
     [diff, index] = min(delta);
-    closest = index;
+    closest = index(1);
 end
