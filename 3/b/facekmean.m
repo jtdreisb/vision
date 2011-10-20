@@ -6,17 +6,19 @@ function [ facepoint ] = facekmean( inputimg ,k )
 
     meanclustered = mykmeans(inputimg, k);
     
-    diffs = []
+    diffs = [];
     % loop through to find the best approximation for a face
     for i=1 : k
         
         [r,c] = find(meanclustered == k);
-        red_avg = 0;
+        redavg = 0;
         yellow_avg = 0;
-        for idx=1 : size(r)
+        n = size(r);
+        for idx=1 : n(1)
             px_rgb = inputimg(r(idx),c(idx),:);
-            yellow_avg = yellow_avg + double(px_rgb(2)-px_rgb(3))/double(size(r));
-            redavg = redavg + px_rgb(1)/size(r);
+
+            yellow_avg = yellow_avg + double(px_rgb(2)-px_rgb(3))/double(n(1));
+            redavg = redavg + px_rgb(1)/n(1);
         end
         diffs = [diffs; redavg - yellow_avg];
     end
