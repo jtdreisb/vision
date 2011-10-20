@@ -49,7 +49,7 @@ function [output] = mykmeans(input, k)
         if (newmeans == means)
             done = 1
         end
-        means = newmeans
-        
+        means = newmeans;
     end
+    means
 end
