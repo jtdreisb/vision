@@ -2,9 +2,12 @@
 % project 3
 % Jason, Blake, Jen
 
-function [closest] = closestmean(means, pixel)
+function [index, val] = closestmean(meanvalues,k, pixel)
+    delta = [];
+    for i=1 : k
+        dmat = meanvalues(i,:) - pixel(:)';
+        delta = [delta; dmat*(dmat')];
+    end
 
-    delta = means - pixel;
-    [diff, index] = min(delta);
-    closest = index(1);
+    [val, index] = min(delta);
 end
