@@ -5,35 +5,35 @@
 function [output] = mykmeans(input, k) 
     input = double(input);
     [height, width, depth] = size(input);
-    
-    inputmag = input(:,:,1);
-    
-    for r=1 : height
-        for c=1 : width
-            inputmag(r,c) = norm(input(r,c));
-        end
-    end
-    
-    
+
     output = input(:,:,1);
     
     % initialize the means
     means = [];
     for i=1: k
-        means = [means;[i,1]];
+        means = [means;[randi(height),randi(width)]];
     end
-    
+    olddiff = Inf;
     
     done = 0;
     while done < 2
-        % iterate through the image
-        meanvalues = getmeanvalues(inputmag,means);
+        diff = 0;
+        % find the mean values for our k mean points
+        meanvalues = getmeanvalues(input,means);
 
+        % Go through assigning points to their closest mean value
         for i=1 : width
             for j=1 : height
-                output(j,i) = closestmean(meanvalues,inputmag(j,i));
+                [output(j,i), delta] = closestmean(meanvalues, k,input(j,i,:));
+                diff = diff + delta;
             end
         end
+        
+        if olddiff < diff
+            done = 1;
+            break
+        end
+        olddiff = diff;
         
         % iterate through the ouput array finding
         % The calculating the new location of the means
@@ -46,11 +46,10 @@ function [output] = mykmeans(input, k)
                 newmeans = [newmeans; means(n,:)];
             end
         end
+        if (newmeans == means)
+            done = 1
+        end
+        means = newmeans
         
-        % Check to see if we moved anything
-        done = (newmeans == means);
-        means = newmeans;
-
     end
-    
 end
