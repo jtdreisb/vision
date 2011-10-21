@@ -8,8 +8,11 @@
 %group = imread('./group.jpg');
 face = imread('./face.jpg');
 
-%doimg(land);
-%doimg(group);
+
+doimg(land);
+doimg(group);
+doimg(face);
+
 
 pt = facekmean(face, 3);
 figure; imshow(face);
