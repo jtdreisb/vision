@@ -4,13 +4,13 @@
 
 
 % this will take quite a while to complete
-land = imread('./landscape.jpg');
-group = imread('./group.jpg');
+%land = imread('./landscape.jpg');
+%group = imread('./group.jpg');
 face = imread('./face.jpg');
 
-doimg(land);
-doimg(group);
+%doimg(land);
+%doimg(group);
 
 pt = facekmean(face, 3);
 figure; imshow(face);
-hold on; plot(pt(1), pt(2), 'Marker', 'p', 'Color', [.88 .48 0], 'MarkerSize', 20);
+hold on; plot(pt(1), pt(2), 'Marker', 'p', 'Color', [.11 .48 0], 'MarkerSize', 20);
