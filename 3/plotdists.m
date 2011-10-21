@@ -2,7 +2,7 @@
 
 function [maskimage] = plotdists(inputpath)
 
-            faceimage = imread(imgpath);
+            faceimage = imread(inputpath);
             imshow(faceimage);
             H = imrect;
             pos = wait(H);
