@@ -27,8 +27,8 @@ mkdir masks;
 manfacefind('./faces/1/image_0001.jpg');
 
 %mask = plotdists('./faces/landscape.jpg');
-%imwrite(maskimage,'masks/landscape','jpg');
+%imwrite(mask,'masks/landscape','jpg');
 
 %mask = plotdists('./faces/group.jpg');
-%imwrite(maskimage,'masks/group','jpg');
+%imwrite(mask,'masks/group','jpg');
 
