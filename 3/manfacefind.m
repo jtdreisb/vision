@@ -1,4 +1,3 @@
-
 % Project 3
 
 function [] = manfacefind(inputpath)
@@ -7,18 +6,19 @@ function [] = manfacefind(inputpath)
             HSVface = rgb2hsv(faceimage);
             hueimg = HSVface(:,:,1);
             
-            HB =(hueimg < .252);
+            HB =(hueimg < .255);
             LB =(hueimg > .1685);
            
             mask = ((LB==0).*HB);
-            imshow(mask);
-%            [R,C] = find(mask == 1);
- %           
-  %          H = max(R);
-   %         W = max(C);
-    %        x = min(R);
-     %       y = min(C);
+           imshow(faceimage);
+            [R,C] = find(mask == 1);
             
-      %      rectangle('Position',[x,y,W,H]);
+            y = mean(R)
+            x = mean(C)
+            
+            
+            
+            hold on; plot(x,y,'Marker','p','Color',[.88 .48 0],'MarkerSize',20)
+
             
 end
