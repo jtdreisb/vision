@@ -1,4 +1,6 @@
-% Project 3
+% Takes the input path and plots the normalized hsv histograms
+% project 3
+% Jason, Blake, Jen
 
 function [maskimage] = plotdists(inputpath)
 

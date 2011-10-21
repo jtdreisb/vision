@@ -1,4 +1,6 @@
-% Project 3
+% Manual face finding algorithm based on hue statistics derived from part a
+% project 3
+% Jason, Blake, Jen
 
 function [] = manfacefind(inputpath)
             figure;
