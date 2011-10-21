@@ -27,5 +27,5 @@ function [ facepoint ] = facekmean( inputimg ,k )
     val = val;
     [r,c] = find(meanclustered == index);
     facepoint = [mean(r), mean(c)];
-    
+    facepoint
 end
