@@ -32,6 +32,10 @@ mkdir masks;
             subplot(211);imhist(facehue);title('Face');
             subplot(212);imhist(otherhue); title('Other');
         end
+        facemean = mymean(facehue(:));
+        othermean = mymean(otherhue(:));
+        facemean
+        othermean
     end
 %end
 
