@@ -29,24 +29,24 @@ mkdir masks;
             [facehue,otherhue] = huedist(img,mask);
             
             figure; 
-            subplot(211);imhist(facehue);title('Face'); 
+            subplot(221);imhist(facehue);title('Face'); 
             
             x = 0:0.01:1;
 
             facemean = mymean(facehue(:));
-            facevar = myvariance(facehue(:));
+            facevar = myvariance(facehue(:),facemean);
 
             y = gaussmf(x,[sqrt(facevar) facemean]);
-            hold on; plot(x,y);
+            subplot(223); plot(x,y);
 
 
-            subplot(212);imhist(otherhue); title('Other');
+            subplot(222);imhist(otherhue); title('Other');
 
             othermean = mymean(otherhue(:));
-            othervar = myvariance(otherhue(:));
+            othervar = myvariance(otherhue(:),othermean);
             
-            y = gaussmf(x,[sqrt(facevar) facemean]);
-            hold on; plot(x,y);
+            y = gaussmf(x,[sqrt(othervar) othermean]);
+            subplot(224); plot(x,y);
             
         end
         
