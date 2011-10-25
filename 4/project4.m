@@ -6,6 +6,7 @@ dirlist = dir('faces/*');
 basedir = 'faces';
 
 maskdir = 'masks';
+mkdir masks;
         % This is a hack to reduce the amount of computation required per
         % iteration of the code. The perception of speed is inversely
         % proportional to the number of pictures that we have to calculate
