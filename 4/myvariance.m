@@ -7,6 +7,7 @@ function [variance] = myvariance(distribution, meanvalue)
 
 	distribution = distribution-meanvalue;
 	distribution = distribution .* distribution;
-	variance = sum(distribution)/(size(distribution)(1));
+    length = size(distribution);
+	variance = sum(distribution)/(length(1)-1);
 
 end
