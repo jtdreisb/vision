@@ -3,8 +3,6 @@
 % Jason, Blake, Jen
 
 function [variance] = myvariance(distribution, meanvalue)
-
-
 	distribution = distribution-meanvalue;
 	distribution = distribution .* distribution;
     length = size(distribution);
