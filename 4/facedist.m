@@ -5,5 +5,5 @@
 function [facehue, otherhue] = facedist(inputimage,mask)
 	% do we need "nonzeros for otherhue?"
 	otherhue = inputimage .* double(mask==0);
-	facehue = nonzeros(normhue .* double(mask>0));
+	facehue = nonzeros(inputimage .* double(mask>0));
 end
