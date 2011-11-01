@@ -4,20 +4,13 @@
 
 dirlist = dir('faces/*');
 basedir = 'faces';
-
+x=7;
 maskdir = 'masks';
-mkdir masks;
-% This is a hack to reduce the amount of computation required per
-% iteration of the code. The perception of speed is inversely
-% proportional to the number of pictures that we have to calculate
-% the hue and distribution on. We still have to write the code to
-% find the mean and multiple peaks of the distribution curve.
-x = 7;
-facehue  = 0;
-otherhue = 0;  
-facegreen = 0;
-othergreen = 0;
-for x=3: length(dirlist)
+facehue  = [];
+otherhue = [];  
+facegreen = [];
+othergreen = [];
+%for x=3: length(dirlist)
 	if (dirlist(x).isdir==1)%make sure it's a dir
         imgdir = strcat(basedir,'/',dirlist(x).name);
         imgsearch = strcat(imgdir,'/*.jpg');
@@ -34,37 +27,60 @@ for x=3: length(dirlist)
             HSVimage = rgb2hsv(img);
             normhue = mod(HSVimage(:,:,1)+.2,1);
 
-            [fhue,ohue] = huedist(normhue,mask);
-            facehue = [facehue; fhue];
-            otherhue = [otherhue; ohue];
+            [fhue,ohue] = facedist(normhue,mask);
+            facehue = [facehue; fhue(:)];
+            otherhue = [otherhue; ohue(:)];
 
             %repeat for normalized green
-            normgreen = img(:,:,2) / (img(:,:,1) + img(:,:,2) + img(:,:,3));
+            img = double(img);
+            
+            normgreen = img(:,:,2) ./ (img(:,:,1) + img(:,:,2) + img(:,:,3) + 1);
             [fgreen, ogreen] = facedist(normgreen, mask);
 
-            facegreen = [facegreen; fgreen];
-            othergreen = [othergreen; ogreen];
+            facegreen = [facegreen; fgreen(:)];
+            othergreen = [othergreen; ogreen(:)];
         end
 
     end
-end
+%end
 
+% load('distributions.mat');
 figure; 
 subplot(221);imhist(facehue);title('Face'); 
 
 x = 0:0.01:1;
 
-facemean = mymean(facehue(:));
-facevar = myvariance(facehue(:),facemean);
+hfacemean = mymean(facehue(:));
+hfacevar = myvariance(facehue(:),hfacemean);
 
-y = gaussmf(x,[sqrt(facevar) facemean]);
+y = gaussmf(x,[sqrt(hfacevar) hfacemean]);
 subplot(223); plot(x,y);
 
 
 subplot(222);imhist(otherhue); title('Other');
 
-othermean = mymean(otherhue(:));
-othervar = myvariance(otherhue(:),othermean);
+hothermean = mymean(otherhue(:));
+hothervar = myvariance(otherhue(:),hothermean);
 
-y = gaussmf(x,[sqrt(othervar) othermean]);
+y = gaussmf(x,[sqrt(hothervar) hothermean]);
 subplot(224); plot(x,y);
+
+
+figure; 
+subplot(221);imhist(facegreen);title('Face'); 
+
+gfacemean = mymean(facegreen(:));
+gfacevar = myvariance(facegreen(:),gfacemean);
+
+y = gaussmf(x,[sqrt(gfacevar) hfacemean]);
+subplot(223); plot(x,y);
+
+subplot(222);imhist(othergreen); title('Other');
+
+gothermean = mymean(facegreen(:));
+gothervar = myvariance(facegreen(:),gfacemean);
+
+y = gaussmf(x,[sqrt(gothervar) gothermean]);
+subplot(224); plot(x,y);
+
+save('gaussians.mat', 'hfacemean','hfacevar','hothermean','hothervar','gfacemean','gfacevar','gothermean', 'gothervar');
