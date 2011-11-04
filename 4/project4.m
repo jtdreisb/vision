@@ -7,6 +7,7 @@ plotgauss=0;
 getskin=0;
 do2d=0;
 calccov=0;
+doskin2d=1;
 
 if getdists
     dirlist = dir('faces/*');
@@ -104,38 +105,37 @@ end
 % count_other = length(otherhue);
 % p_skin = count_skin/(count_skin+count_other);
 % p_other = count_other/(count_skin+count_other);
+if getskin || doskin2d
+%     reg_img = imread('faces/group.jpg');
+%     reg_img =  imread('faces/2/image_0022.jpg');
+    reg_img =  imread('faces/8/image_0138.jpg');
+    %hueify
+    img_hsv = rgb2hsv(reg_img);
+    img_hue = mod(img_hsv(:,:,1)+.2,1);
+    %green
+    d_img = double(reg_img);
+    img_green = d_img(:,:,2) ./ (d_img(:,:,1) + d_img(:,:,2) + d_img(:,:,3));
+    img_green(isnan(img_green)) = 0;
+end
 
 if getskin
-    group_img = imread('faces/group.jpg');
-    
-    group_hsv = rgb2hsv(group_img);
-    group_hue = mod(group_hsv(:,:,1)+.2,1);
-
-    [hue_nmout, hue_bcout] = findskin(group_hue, .4, .6, h_m_skin, h_m_other, h_s_skin, h_s_other);
+   
+    [hue_nmout, hue_bcout] = findskin(img_hue, .4, .6, h_m_skin, h_m_other, h_s_skin, h_s_other);
 
     %display the data
     figure;
-    subplot(311); imshow(group_img); title('Goatee hue');
+    subplot(311); imshow(reg_img); title('Goatee hue');
     subplot(312); imshow(hue_nmout); title('Nearest mean classifier');
     subplot(313); imshow(hue_bcout); title('Bayesian classifier');
 
-
     %plot the normalized green
-    d_group_img = double(group_img);
-    group_green = d_group_img(:,:,2) ./ (d_group_img(:,:,1) + d_group_img(:,:,2) + d_group_img(:,:,3));
-    group_green(isnan(group_green)) = 0;
-    [green_nmout,green_bcout] = findskin(group_green, .5, .5, g_m_skin, g_m_other, g_s_skin, g_s_other);
+    
+    [green_nmout,green_bcout] = findskin(img_green, .5, .5, g_m_skin, g_m_other, g_s_skin, g_s_other);
 
     figure;
-    subplot(311); imshow(group_img); title('Goatee green');
+    subplot(311); imshow(reg_img); title('Goatee green');
     subplot(312); imshow(green_nmout); title('Nearest mean classifier');
     subplot(313); imshow(green_bcout); title('Bayesian classifier');
-
-    % face1 =  imread('faces/2/image_0022.jpg');
-    % findskin(face1, p_skin, p_other, h_m_skin, h_m_other, h_s_skin, h_s_other);
-    % face2 =  imread('faces/6/image_0113.jpg');
-    % findskin(face2, p_skin, p_other, h_m_skin, h_m_other, h_s_skin, h_s_other);
-    % % 
 end
 
 if do2d
@@ -164,5 +164,15 @@ else
     o_cov = [0.0430,0.0015;0.0015,0.0019];
 end
 
+if doskin2d
+    img_2d=[];
+    img_2d(:,:,1) = img_hue;
+    img_2d(:,:,2) = img_green;
+    [nmout_2d,bcout_2d] = findskin(img_2d, [.5 .5], [.5 .5],[h_m_skin g_m_skin], [h_m_other g_m_other], [h_s_skin g_s_skin], [h_s_other g_s_other]);
+    figure;
+    subplot(311); imshow(reg_img); title('2d feature');
+    subplot(312); imshow(nmout_2d); title('Nearest mean classifier');
+    subplot(313); imshow(bcout_2d); title('Bayesian classifier');
+end
 
 
