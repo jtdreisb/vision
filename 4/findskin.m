@@ -2,7 +2,7 @@
 
 function [nmout,bcout] = findskin(image, p_skin, p_other, m_skin, m_other, s_skin, s_other) 
 
-	[height, width, depth] = size(image)
+	[height, width, depth] = size(image);
 
 	% skin classification using nearest mean classifier
 	nmout=zeros([height width]);
