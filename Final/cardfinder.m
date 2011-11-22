@@ -20,12 +20,12 @@ task_name='TILT_AFFINE';
 img=imread(fullfile(img_path, img_name));
 
 %% Do blob detection
-bw_img = im2bw(img);
+bw_img = im2bw(img,.6);
 % Segment
 labeled_img = bwlabel(~bw_img,8);
 imshow(label2rgb(labeled_img));
 
-for i=1:150
+for i=1:max(labeled_img(:))
 [r,c] = find(labeled_img == i);
 
 %% get the top-left and bottom-right corner of the rectangle window where
