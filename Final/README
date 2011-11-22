@@ -1,0 +1,12 @@
+We are developing a credit card detection and scaling system. Using the TILT algorithm [1]
+
+TODO:
+- blob detection
+- segmentation
+- pass through tilt
+- cut out 'non card pixels'
+
+
+REFERENCES:
+[1] TILT: Transform Invariant Low-rank Textures. http://perception.csl.uiuc.edu/matrix-rank/tilt.html
+[2] TILT: Transform Invariant Low-rank Textures, Zhengdong Zhang, Arvind Ganesh, Xiao Liang, and Yi Ma. Submitted to International Journal of Computer Vision (IJCV), December 2010.
