@@ -19,20 +19,32 @@ task_name='TILT_AFFINE';
 [img_name, img_path]=uigetfile('*.*');
 img=imread(fullfile(img_path, img_name));
 
+%% Do blob detection
+bw_img = im2bw(img);
+% Segment
+labeled_img = bwlabel(~bw_img,8);
+imshow(label2rgb(labeled_img));
+
+for i=1:150
+[r,c] = find(labeled_img == i);
+
 %% get the top-left and bottom-right corner of the rectangle window where
 %% we perform TILT.
 % by default, the first point should be top-left one and the second should
 % be bottom-right. Don't mess up the order......
-figure(1);
-imshow(img);
-hold on;
-initial_points=zeros(2, 2);
-for i=1:2
-    initial_points(:, i)=ginput(1)';
-    plot(initial_points(1, i), initial_points(2, i), 'rx');
-    hold on;
+% figure(1);
+% imshow(img);
+% hold on;
+% initial_points=zeros(2, 2);
+% for i=1:2
+%     initial_points(:, i)=ginput(1)';
+%     plot(initial_points(1, i), initial_points(2, i), 'rx');
+%     hold on;
+% end
+if (max(c)-min(c) < 100 || max(r)-min(r) < 100)
+    continue
 end
-
+initial_points=double([min(c),max(c);min(r),max(r)]);
 
 %% Run TILT:
 cd TILT
@@ -85,22 +97,24 @@ tic
 [Dotau, A, E, f, tfm_matrix, focus_size, error_sign, UData, VData, XData, YData, A_scale]=...
     TILT(img, 'AFFINE', initial_points, 'SAVE_PATH', fullfile(cd, task_name),...
     'BLUR_SIGMA', 2, 'BLUR_NEIGHBOR', 2,...
-    'PYRAMID_MAXLEVEL', 1, 'DISPLAY_INTER', 1);
+    'PYRAMID_MAXLEVEL', 1, 'DISPLAY_INTER', 0);
 toc
 %% examples on how to use the result of TILT:
 % 1. transform the input image to the focus window.
 tfm=fliptform(maketform('projective', tfm_matrix'));
 Dotau=imtransform(img, tfm, 'bilinear', 'UData', UData, 'VData', VData, 'XData', XData, 'YData', YData, 'Size', focus_size);
-figure(3);
-imshow(Dotau);
+% figure(3);
+% imshow(Dotau);
 % 2. rectify the input image.XData_whole, YData_whole
 % specify the location of the whole rectified image in x-y coordinate.
 [rectify_image, XData_whole, YData_whole]=imtransform(img, tfm, 'bilinear', 'UData', UData, 'VData', VData);
-figure(4);
-imshow(rectify_image);
+% figure(4);
+% imshow(rectify_image);
 % 3. adjust tfm_matrix to standard coordinate, 
 standard_tfm_matrix=[1 0 1-UData(1); 0 1 1-VData(1); 0 0 1]*tfm_matrix*[1 0 XData(1)-1; 0 1 YData(1)-1; 0 0 1]; % indeed just compose the tfm_matrix with coordinate swtich.
 standard_tfm=fliptform(maketform('projective', standard_tfm_matrix'));
 Dotau=imtransform(img, standard_tfm, 'bilinear', 'UData', [1 size(img, 2)], 'VData', [1 size(img, 1)],  'XData', [1 focus_size(2)], 'YData', [1 focus_size(1)], 'Size', focus_size);
-figure(5);
+figure(i+1);
 imshow(Dotau);
+cd ..
+end
