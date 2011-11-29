@@ -11,6 +11,8 @@ close all;
 [img_name, img_path]=uigetfile('*.*');
 img=imread(fullfile(img_path, img_name));
 
+[kimg,c] = kmeans(img(:,:,1),3);
+
 %% Do blob detection
 bw_img = im2bw(img,.6);
 % Segment
@@ -18,35 +20,31 @@ labeled_img = bwlabel(~bw_img,8);
 imshow(label2rgb(labeled_img));
 
 % this must be odd
-mask_size = 11;
+mask_size = 5;
 mask = ones(mask_size);
 mask_mid = (mask_size+1)/2;
 mask(mask_mid,mask_mid)=0;
 mask_mid = mask_mid-1;
 
 for i=1:max(labeled_img(:))
-    
+    i
     [r,c] = find(labeled_img == i);
-    if (max(c)-min(c) < 100 || max(r)-min(r) < 100)
+    if (length(r) < 10)
         continue
     end
     bits = [r,c];
-    % get only the outer most .001%
-    outer_bits = bits(max(r)*.999 < bits(:,1),:);
-    outer_bits = [outer_bits; bits(min(r)*.001 > bits(:,1),:)];
-    outer_bits = [outer_bits; bits(:,max(c)*.999 < bits(:,2))];
-    outer_bits = [outer_bits; bits(:,min(c)*.001 > bits(:,2))];
-    for j=1:length(r)
-        r(j)
-        for k=1:length(c)
-%             c(k)
-            masked_vect = nonzeros(labeled_img(r(i)-mask_mid:r(i)+mask_mid,c(k)-mask_mid:c(k)+mask_mid).*mask);
-            
-            neighbors = masked_block(masked_block ~= i);
+    % get only the outer most bits
+    k = [bits(bits(:,1) == max(r),:);...
+                  bits(bits(:,1) == min(r),:);...
+                  bits(bits(:,2) == min(c),:);...
+                  bits(bits(:,2) == max(c),:)];
+    
+    for j=1:length(k(:,1))
+            masked_vect = nonzeros(labeled_img(k(j,1)-mask_mid:k(j,1)+mask_mid,k(j,2)-mask_mid:k(j,2)+mask_mid).*mask);
+            neighbors = masked_vect(masked_vect ~= i);
             for n=1:length(neighbors)
                 labeled_img(labeled_img == neighbors(n)) = i;
             end
-        end
     end
 end
 
