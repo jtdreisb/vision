@@ -7,16 +7,27 @@
 clc;
 close all;
 
+cards = cell(1); % put the finished cards in here
+
 %% load the image
 [img_name, img_path]=uigetfile('*.*');
 img=imread(fullfile(img_path, img_name));
-
-[kimg,c] = kmeans(img(:,:,1),3);
+figure; imshow(img);
 
 %% Do blob detection
-bw_img = im2bw(img,.6);
+
+imgR = squeeze(img(:,:,1));
+imgG = squeeze(img(:,:,2));
+imgB = squeeze(img(:,:,3));
+% threshold with otsu's method
+binR = im2bw(imgR, grayThresh(imgR));
+binG = im2bw(imgG, grayThresh(imgG));
+binB = im2bw(imgB, grayThresh(imgB));
+bw_img = imcomplement(binR&binG&binB);
+
 % Segment
-labeled_img = bwlabel(~bw_img,8);
+labeled_img = bwlabel(bw_img,8);
+figure;
 imshow(label2rgb(labeled_img));
 
 % this must be odd
@@ -26,27 +37,27 @@ mask_mid = (mask_size+1)/2;
 mask(mask_mid,mask_mid)=0;
 mask_mid = mask_mid-1;
 
-for i=1:max(labeled_img(:))
-    i
-    [r,c] = find(labeled_img == i);
-    if (length(r) < 10)
-        continue
-    end
-    bits = [r,c];
-    % get only the outer most bits
-    k = [bits(bits(:,1) == max(r),:);...
-                  bits(bits(:,1) == min(r),:);...
-                  bits(bits(:,2) == min(c),:);...
-                  bits(bits(:,2) == max(c),:)];
-    
-    for j=1:length(k(:,1))
-            masked_vect = nonzeros(labeled_img(k(j,1)-mask_mid:k(j,1)+mask_mid,k(j,2)-mask_mid:k(j,2)+mask_mid).*mask);
-            neighbors = masked_vect(masked_vect ~= i);
-            for n=1:length(neighbors)
-                labeled_img(labeled_img == neighbors(n)) = i;
-            end
-    end
-end
+% for i=1:max(labeled_img(:))
+%     i
+%     [r,c] = find(labeled_img == i);
+%     if (length(r) < 10)
+%         continue
+%     end
+%     bits = [r,c];
+%     % get only the outer most bits
+%     k = [bits(bits(:,1) == max(r),:);...
+%                   bits(bits(:,1) == min(r),:);...
+%                   bits(bits(:,2) == min(c),:);...
+%                   bits(bits(:,2) == max(c),:)];
+%     
+%     for j=1:length(k(:,1))
+%             masked_vect = nonzeros(labeled_img(k(j,1)-mask_mid:k(j,1)+mask_mid,k(j,2)-mask_mid:k(j,2)+mask_mid).*mask);
+%             neighbors = masked_vect(masked_vect ~= i);
+%             for n=1:length(neighbors)
+%                 labeled_img(labeled_img == neighbors(n)) = i;
+%             end
+%     end
+% end
 
 for i=1:max(labeled_img(:))
     [r,c] = find(labeled_img == i);
@@ -77,7 +88,45 @@ rectified_img=imtransform(img, standard_tfm, 'bilinear', 'UData', [1 size(img, 2
 
 %% From the rectified image. Trim and reshape to a known card size
 
-figure(i+1);
+% get our rgb vectors 
+imgR = squeeze(rectified_img(:,:,1));
+imgG = squeeze(rectified_img(:,:,2));
+imgB = squeeze(rectified_img(:,:,3));
+% threshold our vectors
+binR = im2bw(imgR, grayThresh(imgR));
+binG = im2bw(imgG, grayThresh(imgG));
+binB = im2bw(imgB, grayThresh(imgB));
+% combine the vectors
+bw = imcomplement(binR&binG&binB);
+
+
+figure;
+subplot(311);
+imshow(bw);
+
+subplot(312);
 imshow(rectified_img);
+
+% filter out background pixels
+[r,c] = find(bw == 1);
+
+% construct final image
+final_img = rectified_img(min(r):max(r),min(c):max(c),:);
+subplot(313);
+imshow(final_img);
+cards{length(cards)}=final_img;
+cards = [cards;cell(1)];
 cd ..
+end
+
+
+num_cards = length(cards)-1;
+
+
+square_size = ceil(sqrt(num_cards));
+
+figure;
+for i=1:num_cards
+subplot(square_size, square_size, i);
+imshow(cards{i});
 end
